@@ -1,0 +1,5 @@
+# 2. API: Generate nutrition tip using Gemini Flash
+@router.get("/nutrition-tip")
+def get_flash_tip(goal: str):
+    tip = generate_nutrition_tip_with_flash(goal)
+    return {"goal": goal, "nutrition_tip": tip}

@@ -1,0 +1,25 @@
+# 8. Web: View all users & their plans
+@router.get("/view-all-users", response_class=HTMLResponse)
+def view_all_users(request: Request):
+    db = SessionLocal()
+    users = db.query(User).all()
+    user_data = []
+
+    for user in users:
+        plan = db.query(WorkoutPlan).filter(WorkoutPlan.user_id == user.id).first()
+        user_data.append({
+            "id": user.id,
+            "name": user.name,
+            "age": user.age,
+            "weight": user.weight,
+            "goal": user.goal,
+            "intensity": user.intensity,
+            "original_plan": plan.original_plan if plan else "N/A",
+            "updated_plan": plan.updated_plan if plan and plan.updated_plan else "Not updated"
+        })
+
+    db.close()
+    return templates.TemplateResponse("all_users.html", {
+        "request": request,
+        "users": user_data
+    })

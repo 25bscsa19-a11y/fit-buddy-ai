@@ -1,0 +1,11 @@
+# 1. API: Generate workout using Gemini Pro
+@router.post("/generate-workout/gemini")
+async def generate_gemini_workout(request: WorkoutRequest):
+    try:
+        result = generate_workout_gemini({
+            "goal": request.goal,
+            "intensity": request.intensity
+        })
+        return {"model": "gemini-pro", "workout_plan": result}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
